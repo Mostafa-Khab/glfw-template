@@ -2,7 +2,7 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
-#include </sasa/glfw-src/deps/linmath.h>
+#include "deps/linmath.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,7 +10,7 @@
 #include <stdbool.h>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+#include "deps/stb_image.h"
 
 #include "src/log.h"
 #include "src/shader.h"
@@ -178,6 +178,10 @@ int main(int argc, const char* argv[])
 
   int imgw, imgh, imgc;
   unsigned char* imgdata = stbi_load("assets/bird64.png", &imgw, &imgh, &imgc, 0);
+
+  if(!imgdata)
+     imgdata = stbi_load("../assets/bird64.png", &imgw, &imgh, &imgc, 0);
+
   if(!imgdata)
   {
     log("failed to load requested image");
@@ -192,6 +196,8 @@ int main(int argc, const char* argv[])
   texture_bind(tex);
   texture_data(tex, imgw, imgh, imgc, imgdata);
   texture_filters(tex, GL_REPEAT, GL_NEAREST);
+
+  stbi_image_free(imgdata);
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -244,6 +250,5 @@ int main(int argc, const char* argv[])
   texture_delete(&tex);
 
   glfwTerminate();
-  stbi_image_free(imgdata);
   return 0;
 }
