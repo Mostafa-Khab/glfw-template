@@ -1,4 +1,3 @@
 *.bak
 build/*
 token.txt
-.gitignore
